@@ -62,27 +62,27 @@ The project includes:
 
 ## 📂 Project Structure
 
-src/
-│── api/
-│ └── apiInstance.js
-│
-│── app/
-│ └── store.js
-│
-│── features/
-│ └── user/
-│ └── userSlice.js
-│
-│── components/
-│ ├── Header.jsx
-│ ├── Home.jsx
-│ ├── Login.jsx
-│ ├── Signup.jsx
-│ ├── StudentForm.jsx
-│ └── StudentList.jsx
-│
-│── App.jsx
-│── main.jsx
+src/ <br>
+│── api/ <br>
+│ └── apiInstance.js <br>
+│<br>
+│── app/ <br>
+│ └── store.js  <br>
+│<br>
+│── features/  <br>
+│ └── user/ <br>
+│ └── userSlice.js <br>
+│<br>
+│── components/  <br>
+│ ├── Header.jsx <br>
+│ ├── Home.jsx <br>
+│ ├── Login.jsx <br>
+│ ├── Signup.jsx <br>
+│ ├── StudentForm.jsx <br>
+│ └── StudentList.jsx <br>
+│<br>
+│── App.jsx <br>
+│── main.jsx <br>
 
 
 ---
