@@ -1,4 +1,23 @@
 {
-    "user": [],
-    "students": []
+  "users": [],
+  "accounts": [
+    {
+      "id": 1,
+      "username": "admin",
+      "email": "admin@example.com",
+      "password": "admin123"
+    },
+    {
+      "id": 1769701722614,
+      "username": "tycijesusu",
+      "email": "cykul@mailinator.com",
+      "password": "Pa$$w0rd!"
+    },
+    {
+      "id": 1769701866846,
+      "username": "itskisu._.612",
+      "email": "parmarkrishna1812@gmail.com",
+      "password": "krishu126"
+    }
+  ]
 }

@@ -1,103 +1,109 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiInstance from "../../api/apiInstance";
 
-export const addStudent = createAsyncThunk("users/addStudent", async(user,rejectWithValue) => {
-    try {
-        let res = await apiInstance.post("/users", user);
-        console.log(res.data)
-        return res.data; 
-    } catch (error) {
-        alert(rejectWithValue(error.message));
+/* ADD STUDENT */
+export const addStudent = createAsyncThunk(
+    "users/addStudent",
+    async (user, { rejectWithValue }) => {
+        try {
+            const res = await apiInstance.post("/users", user);
+            return res.data;
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
     }
-})
+);
 
-export const deleteStudent = createAsyncThunk("users/deleteStudent", async(id,rejectWithValue) => {
-    try {
-        let res = await apiInstance.delete("/users/${id}");
-        console.log(res.id)
-        return id;
-    } catch (error) {
-        alert(rejectWithValue(error.message));
+/* DELETE STUDENT */
+export const deleteStudent = createAsyncThunk(
+    "users/deleteStudent",
+    async (id, { rejectWithValue }) => {
+        try {
+            await apiInstance.delete(`/users/${id}`);
+            return id;
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
     }
-})
+);
 
-export const updateStudent = createAsyncThunk("users/updateStudent", async(id,rejectWithValue) => {
-    try {
-        let res = await apiInstance.put("/users/${id}");
-        console.log(res.id)
-        return res.id; 
-    } catch (error) {
-        alert(rejectWithValue(error.message));
+/* UPDATE STUDENT */
+export const updateStudent = createAsyncThunk(
+    "users/updateStudent",
+    async ({ id, data }, { rejectWithValue }) => {
+        try {
+            const res = await apiInstance.put(`/users/${id}`, data);
+            return res.data;
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
     }
-})
+);
 
-export const getStudent = createAsyncThunk("users/getStudent", async(_,rejectWithValue) => {
-    try {
-        let res = await apiInstance.get("/users");
-        console.log(res.data)
-        return res.data; 
-    } catch (error) {
-        alert(rejectWithValue(error.message));
+/* GET STUDENTS */
+export const getStudent = createAsyncThunk(
+    "users/getStudent",
+    async (_, { rejectWithValue }) => {
+        try {
+            const res = await apiInstance.get("/users");
+            return res.data;
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
     }
-})
+);
 
 const userSlice = createSlice({
     name: "users",
     initialState: {
-        users: [],
+        students: [],
         loading: false,
         error: null
     },
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(addStudent.fulfilled, (state, action) => {
-            state.users.push(action.payload);
-        })
+        builder
 
-        builder.addCase(addStudent.rejected, (state, action) => {
-            state.error = action.payload;
-        })
+            /* ADD */
+            .addCase(addStudent.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(addStudent.fulfilled, (state, action) => {
+                state.loading = false;
+                state.students.push(action.payload);
+            })
+            .addCase(addStudent.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
 
-        builder.addCase(addStudent.pending, (state) => {
-            state.loading = true;
-        })
+            /* DELETE */
+            .addCase(deleteStudent.fulfilled, (state, action) => {
+                state.students = state.students.filter(
+                    (student) => student.id !== action.payload
+                );
+            })
 
-        builder.addCase(deleteStudent.fulfilled, (state, action) => {
-            state.users = state.users.filter(user => user.id !== action.payload);
-        })
+            /* UPDATE */
+            .addCase(updateStudent.fulfilled, (state, action) => {
+                state.students = state.students.map((student) =>
+                    student.id === action.payload.id ? action.payload : student
+                );
+            })
 
-        builder.addCase(deleteStudent.rejected, (state, action) => {
-            state.error = action.payload;
-        })
-
-        builder.addCase(deleteStudent.pending, (state) => {
-            state.loading = true;
-        })
-
-        builder.addCase(updateStudent.fulfilled, (state, action) => {
-            state.users = state.users.map(user => user.id === action.payload.id ? action.payload : user);
-        })
-
-        builder.addCase(updateStudent.rejected, (state, action) => {
-            state.error = action.payload;
-        })
-
-        builder.addCase(updateStudent.pending, (state) => {
-            state.loading = true;
-        })
-
-        builder.addCase(getStudent.fulfilled, (state, action) => {
-            state.users = action.payload;
-        })
-
-        builder.addCase(getStudent.rejected, (state, action) => {
-            state.error = action.payload;
-        })
-
-        builder.addCase(getStudent.pending, (state) => {
-            state.loading = true;
-        })
+            /* GET */
+            .addCase(getStudent.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getStudent.fulfilled, (state, action) => {
+                state.loading = false;
+                state.students = action.payload;
+            })
+            .addCase(getStudent.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            });
     }
-})
+});
 
 export default userSlice.reducer;

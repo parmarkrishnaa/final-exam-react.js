@@ -1,21 +1,67 @@
-import React from "react";
-import { useNavigate } from "react-router";
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+    setError("");
+  };
+
+  const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
 
-    localStorage.setItem("isLogin", true);
+    // Validate fields
+    if (!formData.username || !formData.password) {
+      setError("Please fill all fields!");
+      setLoading(false);
+      return;
+    }
 
-    const login = localStorage.getItem("redirectAfterLogin");
+    try {
+      // Fetch all accounts from db.json
+      const response = await axios.get("http://localhost:3000/accounts");
+      const accounts = response.data;
 
-    if (login) {
-      localStorage.removeItem("redirectAfterLogin");
-      navigate(login);
-    } else {
-      navigate("/");
+      // Find user with matching username and password
+      const user = accounts.find(
+        (acc) =>
+          acc.username === formData.username &&
+          acc.password === formData.password
+      );
+
+      if (user) {
+        // Login successful
+        localStorage.setItem("isLogin", "true");
+        localStorage.setItem("currentUser", JSON.stringify(user));
+
+        const redirectPath =
+          localStorage.getItem("redirectAfterLogin") || "/";
+        localStorage.removeItem("redirectAfterLogin");
+
+        alert("✅ Login successful!");
+        navigate(redirectPath);
+      } else {
+        setError("❌ Invalid username or password!");
+      }
+    } catch (err) {
+      setError("❌ Login failed. Please try again.");
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -23,37 +69,60 @@ const Login = () => {
     <div className="container">
       <div className="row justify-content-center">
         <div className="col-md-6">
-          <form method="post">
-            <div className="mb-3">
-              <label htmlFor="std-name" className="form-label">
-                Username
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                id="std-name"
-                aria-describedby="emailHelp"
-              />
+          <div className="card mt-5">
+            <div className="card-body">
+              <h3 className="card-title text-center mb-4">Login</h3>
+              {error && (
+                <div className="alert alert-danger" role="alert">
+                  {error}
+                </div>
+              )}
+              <form onSubmit={handleLogin}>
+                <div className="mb-3">
+                  <label htmlFor="username" className="form-label">
+                    Username
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="username"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    placeholder="Enter your username"
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="password" className="form-label">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Enter your password"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="btn btn-primary w-100"
+                  disabled={loading}
+                >
+                  {loading ? "Logging in..." : "Login"}
+                </button>
+              </form>
+              <hr />
+              <p className="text-center">
+                Don't have an account?{" "}
+                <Link to="/signup" className="text-decoration-none">
+                  Sign up here
+                </Link>
+              </p>
             </div>
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label">
-                Password
-              </label>
-              <input
-                type="password"
-                className="form-control"
-                id="password"
-                aria-describedby="emailHelp"
-              />
-            </div>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              onClick={handleLogin}
-            >
-              Login
-            </button>
-          </form>
+          </div>
         </div>
       </div>
     </div>

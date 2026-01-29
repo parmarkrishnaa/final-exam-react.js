@@ -1,14 +1,40 @@
-import React from "react";
-import { NavLink } from "react-router";
+import React, { useState, useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
+  const [isLogin, setIsLogin] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const login = localStorage.getItem("isLogin");
+    const user = localStorage.getItem("currentUser");
+    
+    if (login === "true" && user) {
+      setIsLogin(true);
+      setCurrentUser(JSON.parse(user));
+    } else {
+      setIsLogin(false);
+      setCurrentUser(null);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("isLogin");
+    localStorage.removeItem("currentUser");
+    setIsLogin(false);
+    setCurrentUser(null);
+    alert("✅ Logged out successfully!");
+    navigate("/");
+  };
+
   return (
     <div className="container-fluid">
       <div className="row">
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
           <div className="container-fluid">
             <NavLink className="navbar-brand" to="/">
-              SMS
+              📚 SMS
             </NavLink>
             <button
               className="navbar-toggler"
@@ -31,33 +57,45 @@ const Header = () => {
                     Home
                   </NavLink>
                 </li>
-                <li className="nav-item">
-                  <NavLink className="nav-link" to="/student-form">
-                    Add Student
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink className="nav-link" to="/student-list">
-                    View Student
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink className="nav-link" to="/student-detail">
-                    View Users
-                  </NavLink>
-                </li>
+                {isLogin && (
+                  <>
+                    <li className="nav-item">
+                      <NavLink className="nav-link" to="/student-form">
+                        Add Student
+                      </NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink className="nav-link" to="/student-list">
+                        View Student
+                      </NavLink>
+                    </li>
+                  </>
+                )}
               </ul>
-              <form className="d-flex" role="search">
-                <input
-                  className="form-control me-2"
-                  type="search"
-                  placeholder="Search"
-                  aria-label="Search"
-                />
-                <button className="btn btn-outline-success" type="submit">
-                  Search
-                </button>
-              </form>
+              <div className="d-flex align-items-center gap-3">
+                {isLogin ? (
+                  <>
+                    <span className="navbar-text">
+                      👤 <strong>{currentUser?.username}</strong>
+                    </span>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <NavLink to="/login" className="btn btn-primary btn-sm me-2">
+                      Login
+                    </NavLink>
+                    <NavLink to="/signup" className="btn btn-success btn-sm">
+                      Sign Up
+                    </NavLink>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </nav>
