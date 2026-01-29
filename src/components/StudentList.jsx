@@ -1,16 +1,17 @@
-import React, { useState } from 'react'
-import apiInstance from '../api/apiInstance'
+import React, { useState, useEffect } from 'react'
+import { useDispatch } from "react-redux";
+import { editStudent, deleteStudent, getStudent } from "../features/user/userSlice.js";
 
 const StudentList = () => {
 
     const [students, setStudents] = useState([]);
 
-    useEffect(() => {
-        fetch(apiInstance)
-        .then(res => res.json())
-        .then(data => setStudents(data))
-        .catch(error => console.log(error))
-    }, [])
+    const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getStudent());
+    setStudents({});
+  }, [])
 
   return (
     <div className='container'>
@@ -42,15 +43,15 @@ const StudentList = () => {
                                     <td>{rollNo}</td>
                                     <td>{stdClass}</td>
                                     <td>
-                                        <button type='button' className='btn btn-warning'>Edit</button>
-                                        <button type='button' className='btn btn-danger'>Delete</button>
+                                        <button type='button' className='btn btn-warning' onClick={() => dispatch(editStudent())}>Edit</button>
+                                        <button type='button' className='btn btn-danger' onClick={() => dispatch(deleteStudent())}>Delete</button>
                                     </td>
                                 </tr>
                             )
                         })
                         :
                         <tr>
-                            <td className='text-center' colSpan={4}>Data not available!</td>
+                            <td className='text-center' colSpan={5}>Data not available!</td>
                         </tr>
                     }
                 </tbody>

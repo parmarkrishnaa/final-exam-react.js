@@ -51,7 +51,51 @@ const userSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(addStudent.fulfilled, (state, action) => {
-            state
+            state.users.push(action.payload);
+        })
+
+        builder.addCase(addStudent.rejected, (state, action) => {
+            state.error = action.payload;
+        })
+
+        builder.addCase(addStudent.pending, (state) => {
+            state.loading = true;
+        })
+
+        builder.addCase(deleteStudent.fulfilled, (state, action) => {
+            state.users = state.users.filter(user => user.id !== action.payload);
+        })
+
+        builder.addCase(deleteStudent.rejected, (state, action) => {
+            state.error = action.payload;
+        })
+
+        builder.addCase(deleteStudent.pending, (state) => {
+            state.loading = true;
+        })
+
+        builder.addCase(updateStudent.fulfilled, (state, action) => {
+            state.users = state.users.map(user => user.id === action.payload.id ? action.payload : user);
+        })
+
+        builder.addCase(updateStudent.rejected, (state, action) => {
+            state.error = action.payload;
+        })
+
+        builder.addCase(updateStudent.pending, (state) => {
+            state.loading = true;
+        })
+
+        builder.addCase(getStudent.fulfilled, (state, action) => {
+            state.users = action.payload;
+        })
+
+        builder.addCase(getStudent.rejected, (state, action) => {
+            state.error = action.payload;
+        })
+
+        builder.addCase(getStudent.pending, (state) => {
+            state.loading = true;
         })
     }
 })
