@@ -1,16 +1,154 @@
-# React + Vite
+# 📚 Student Management System (React JS)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🔹 Project Overview
 
-Currently, two official plugins are available:
+This is a **Student Management System** developed using **React JS** as part of the **final practical exam**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The project includes:
+- User Authentication (Login / Signup)
+- Protected Routes
+- Student CRUD Operations
+- Redux Toolkit for state management
+- JSON Server (`db.json`) for backend data handling
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🔗 Live Demo
 
-## Expanding the ESLint configuration
+👉 **Live Visit:**  
+[Live visit](https://final-exam-react-js.vercel.app/)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🔑 Features
+
+- 🔐 Login & Signup functionality
+- 🛡 Protected routes using authentication
+- ➕ Add student data
+- 📋 View student list
+- ✏️ Update student details
+- ❌ Delete student
+- 📦 Redux Toolkit integration
+- 🗄 JSON Server (db.json)
+- 🎨 Bootstrap UI
+
+---
+
+## 🔄 Application Flow
+
+1. User visits the website for the first time
+2. Clicks on **Add Student**
+3. If not logged in → redirected to **Login**
+4. New user → redirected to **Signup**
+5. After successful signup → Login
+6. After login:
+   - User can add student data
+   - View student list
+   - Edit or delete student
+7. All student data is stored in **db.json**
+
+---
+
+## 🛠 Technologies Used
+
+- React JS (Vite)
+- Redux Toolkit
+- React Router DOM
+- Axios
+- Bootstrap 5
+- JSON Server
+- LocalStorage
+
+---
+
+## 📂 Project Structure
+
+src/
+│── api/
+│ └── apiInstance.js
+│
+│── app/
+│ └── store.js
+│
+│── features/
+│ └── user/
+│ └── userSlice.js
+│
+│── components/
+│ ├── Header.jsx
+│ ├── Home.jsx
+│ ├── Login.jsx
+│ ├── Signup.jsx
+│ ├── StudentForm.jsx
+│ └── StudentList.jsx
+│
+│── App.jsx
+│── main.jsx
+
+
+---
+
+## 🗄 JSON Server Setup
+
+### db.json Example
+
+```json
+{
+  "accounts": [
+    {
+      "id": 1,
+      "username": "admin",
+      "email": "admin@gmail.com",
+      "password": "123456"
+    }
+  ],
+  "users": [
+    {
+      "id": 101,
+      "name": "Krishna",
+      "rollNo": "12",
+      "stdClass": "10"
+    }
+  ]
+}
+
+▶️ How to Run the Project
+1️⃣ Install Dependencies
+npm install
+
+2️⃣ Start React Application
+npm run dev
+
+3️⃣ Start JSON Server
+json-server --watch db.json --port 3000
+
+📌 CRUD Operations
+Operation	Method	Endpoint
+Add Student	POST	/users
+Get Students	GET	/users
+Update Student	PUT	/users/:id
+Delete Student	DELETE	/users/:id
+🔐 Authentication Example
+localStorage.setItem("isLogin", "true");
+localStorage.setItem("currentUser", JSON.stringify(user));
+
+🎯 Exam Conclusion
+
+This project fulfills all final practical exam requirements including:
+
+Authentication
+
+Routing
+
+Redux Toolkit
+
+CRUD Operations
+
+JSON Server integration
+
+👨‍💻 Developed By
+
+Parmar Krishna
+Frontend Developer (React JS)
+
+---
