@@ -1,18 +1,26 @@
-import React from 'react'
-import { useNavigate } from 'react-router';
+import React from "react";
+import { useNavigate } from "react-router";
 
 const Login = () => {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const handleLogin = (e) => {
+    e.preventDefault();
 
-    const handleLogin = (e) => {
-        e.preventDefault();
+    localStorage.setItem("isLogin", true);
 
-        navigate("/student-form");
+    const login = localStorage.getItem("redirectAfterLogin");
+
+    if (login) {
+      localStorage.removeItem("redirectAfterLogin");
+      navigate(login);
+    } else {
+      navigate("/");
     }
+  };
 
   return (
-     <div className="container">
+    <div className="container">
       <div className="row justify-content-center">
         <div className="col-md-6">
           <form method="post">
@@ -49,7 +57,7 @@ const Login = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Login;

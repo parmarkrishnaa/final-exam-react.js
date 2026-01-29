@@ -7,8 +7,16 @@ const StudentForm = () => {
   const handleAddStudent = (e) => {
     e.preventDefault();
 
-        alert("Please login to continue process..");
-        navigate("/login");
+    const isLogin = localStorage.getItem("isLogin");
+    if (!isLogin) {
+      alert("Please login to continue process..");
+      localStorage.setItem("redirectAfterLogin", "/student-form");
+      navigate("/login");
+      return;
+    }
+
+    alert("Student added successfully!");
+    navigate("/student-list");
   };
 
   return (

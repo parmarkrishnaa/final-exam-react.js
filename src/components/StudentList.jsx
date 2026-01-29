@@ -1,6 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
+import apiInstance from '../api/apiInstance'
 
 const StudentList = () => {
+
+    const [students, setStudents] = useState([]);
+
+    useEffect(() => {
+        fetch(apiInstance)
+        .then(res => res.json())
+        .then(data => setStudents(data))
+        .catch(error => console.log(error))
+    }, [])
+
   return (
     <div className='container'>
       <div className="row justify-content-center">
@@ -19,27 +30,29 @@ const StudentList = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>John Doe</td>
-                        <td>12345</td>
-                        <td>10th Grade</td>
-                        <td>Edit/Delete</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>John Doe</td>
-                        <td>12345</td>
-                        <td>10th Grade</td>
-                        <td>Edit/Delete</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>John Doe</td>
-                        <td>12345</td>
-                        <td>10th Grade</td>
-                        <td>Edit/Delete</td>
-                    </tr>
+                    {
+                        students.length > 0
+                        ?
+                        students.map((std, index) => {
+                            const { name, rollNo, stdClass, id} = std;
+                            return (
+                                <tr key={id}>
+                                    <td>{index + 1}</td>
+                                    <td>{name}</td>
+                                    <td>{rollNo}</td>
+                                    <td>{stdClass}</td>
+                                    <td>
+                                        <button type='button' className='btn btn-warning'>Edit</button>
+                                        <button type='button' className='btn btn-danger'>Delete</button>
+                                    </td>
+                                </tr>
+                            )
+                        })
+                        :
+                        <tr>
+                            <td className='text-center' colSpan={4}>Data not available!</td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
